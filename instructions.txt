@@ -1,0 +1,120 @@
+Needed software:
+
+--------------------
+
+Visual Studio 2022
+
+SQL Server 2022 Developer
+
+SQL Server Management Studio (SSMS) 20.2 (maybe included)
+ 
+ 
+Task
+
+--------------------
+
+A Web API that handles a "Person" entity.
+
+Secondary, manage the Professions & Hobbies
+ 
+ 
+Needed technologies
+
+------------------
+
+Web API
+
+Entity Framework Core (EF Core) = ORM
+ 
+ 
+Person
+
+------------------
+
+Id (int)
+
+FirstName
+
+LastName
+
+DateOfBirth
+
+Comments
+
+-> To a single "Profession"
+
+-> To multiple Hobbies
+ 
+ 
+Profession
+
+------------------
+
+Id (int)
+
+Name
+ 
+ 
+Hobby
+
+------------------
+
+Id (int)
+
+Name
+ 
+ 
+Outcome:
+
+-------------------------------------------------------------------------------------
+Needed software:
+--------------------
+Visual Studio 2022
+SQL Server 2022 Developer
+SQL Server Management Studio (SSMS) 20.2 (maybe included)
+ 
+ 
+Task
+--------------------
+A Web API that handles a "Person" entity.
+Secondary, manage the Professions & Hobbies
+ 
+ 
+Needed technologies
+------------------
+Web API
+Entity Framework Core (EF Core) = ORM
+ 
+ 
+Person
+------------------
+Id (int)
+FirstName
+LastName
+DateOfBirth
+Comments
+-> To a single "Profession"
+-> To multiple Hobbies
+ 
+ 
+Profession
+------------------
+Id (int)
+Name
+ 
+ 
+Hobby
+------------------
+Id (int)
+Name
+ 
+ 
+Outcome:
+-------------------------------------------------------------------------------------
+5 endpoints for each entity:
+ 
+1. GET single
+2. GET list
+3. POST create
+4. PUT update
+5. DELETE delete
