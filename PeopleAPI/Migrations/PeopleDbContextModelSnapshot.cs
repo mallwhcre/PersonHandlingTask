@@ -24,15 +24,15 @@ namespace PeopleAPI.Migrations
 
             modelBuilder.Entity("HobbyModelPersonModel", b =>
                 {
-                    b.Property<int>("HobbyModelId")
+                    b.Property<int>("HobbiesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonModelId")
+                    b.Property<int>("PeopleId")
                         .HasColumnType("int");
 
-                    b.HasKey("HobbyModelId", "PersonModelId");
+                    b.HasKey("HobbiesId", "PeopleId");
 
-                    b.HasIndex("PersonModelId");
+                    b.HasIndex("PeopleId");
 
                     b.ToTable("PersonHobbies", (string)null);
                 });
@@ -107,13 +107,13 @@ namespace PeopleAPI.Migrations
                 {
                     b.HasOne("PeopleAPI.Models.HobbyModel", null)
                         .WithMany()
-                        .HasForeignKey("HobbyModelId")
+                        .HasForeignKey("HobbiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PeopleAPI.Models.PersonModel", null)
                         .WithMany()
-                        .HasForeignKey("PersonModelId")
+                        .HasForeignKey("PeopleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

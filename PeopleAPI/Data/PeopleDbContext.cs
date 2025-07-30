@@ -28,8 +28,8 @@ namespace PeopleAPI.Data
 
             //person-hobby relationship (many-to-many) (auto join table)
             modelBuilder.Entity<PersonModel>()
-                .HasMany<HobbyModel>() //person has many hobbies
-                .WithMany() //hobby can belong to many people
+                .HasMany(p => p.Hobbies) //person has many hobbies
+                .WithMany(h => h.People) //hobby can belong to many people
                 .UsingEntity(j => j.ToTable("PersonHobbies"));
         }       
     

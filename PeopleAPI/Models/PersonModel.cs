@@ -8,5 +8,8 @@ namespace PeopleAPI.Models
         public DateTime DateOfBirth { get; set; }
         public string? Comments { get; set; }
         public int? ProfessionId { get; set; }
+        
+        // Navigation properties
+        public List<HobbyModel> Hobbies { get; set; } = new();
     }
 }

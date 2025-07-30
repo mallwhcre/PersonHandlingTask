@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI/PeopleAPI.csproj": {}
+    "/Users/mariakarkani/Documents/Dimitris/PersonHandlingAPI/PeopleAPI/PeopleAPI.csproj": {}
   },
   "projects": {
-    "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI/PeopleAPI.csproj": {
+    "/Users/mariakarkani/Documents/Dimitris/PersonHandlingAPI/PeopleAPI/PeopleAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI/PeopleAPI.csproj",
+        "projectUniqueName": "/Users/mariakarkani/Documents/Dimitris/PersonHandlingAPI/PeopleAPI/PeopleAPI.csproj",
         "projectName": "PeopleAPI",
-        "projectPath": "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI/PeopleAPI.csproj",
+        "projectPath": "/Users/mariakarkani/Documents/Dimitris/PersonHandlingAPI/PeopleAPI/PeopleAPI.csproj",
         "packagesPath": "/Users/mariakarkani/.nuget/packages/",
-        "outputPath": "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI/obj/",
+        "outputPath": "/Users/mariakarkani/Documents/Dimitris/PersonHandlingAPI/PeopleAPI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/mariakarkani/.nuget/NuGet/NuGet.Config"
@@ -51,6 +51,10 @@
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.7, )"
             },
