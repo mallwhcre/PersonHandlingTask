@@ -6,7 +6,7 @@ A RESTful Web API built with .NET 9 for managing people, their professions, and 
 
 - .NET 9 & ASP.NET Core Web API
 - Entity Framework Core 9.0
-- MySQL 9.3
+- Currently Using MySQL
 - Swagger/OpenAPI
 
 ## Database Entities
