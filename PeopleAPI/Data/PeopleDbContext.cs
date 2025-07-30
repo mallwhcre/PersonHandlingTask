@@ -20,10 +20,11 @@ namespace PeopleAPI.Data
 
             //person-profession relationship (one-to-many)
             modelBuilder.Entity<PersonModel>()
-                .HasOne<ProfessionModel>() //person has 1 profession
+                .HasOne<ProfessionModel>() //person has 1 profession 
                 .WithMany() //profession has many people
                 .HasForeignKey(p => p.ProfessionId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired(false) //allows null profession
+                .OnDelete(DeleteBehavior.SetNull);
 
             //person-hobby relationship (many-to-many) (auto join table)
             modelBuilder.Entity<PersonModel>()

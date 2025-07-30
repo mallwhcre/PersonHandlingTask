@@ -7,6 +7,6 @@ namespace PeopleAPI.Models
         public required string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? Comments { get; set; }
-        public int ProfessionId { get; set; }
+        public int? ProfessionId { get; set; }
     }
 }
