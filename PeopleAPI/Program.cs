@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using PeopleAPI.Data;
 
@@ -9,7 +8,8 @@ builder.Services.AddControllers();
 
 // Add Entity Framework
 builder.Services.AddDbContext<PeopleDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
+    new MySqlServerVersion(new Version(9, 3, 0))));
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -23,8 +23,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
