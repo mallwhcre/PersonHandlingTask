@@ -51,6 +51,19 @@ namespace PeopleAPI.Controllers
                 return BadRequest();
             }
 
+            // Check if professionID exists
+            if (personModel.ProfessionId.HasValue)
+            {
+                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personModel.ProfessionId.Value);
+                if (!professionExists)
+                {
+                    return BadRequest($"Profession with ID {personModel.ProfessionId} does not exist.");
+                }
+            }
+
+            //prevent accidental creation of new hobby entity 
+            personModel.Hobbies.Clear();
+
             _context.Entry(personModel).State = EntityState.Modified;
 
             try
@@ -76,6 +89,18 @@ namespace PeopleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<PersonModel>> PostPersonModel(PersonModel personModel)
         {
+            
+            if (personModel.ProfessionId.HasValue)
+            {
+                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personModel.ProfessionId.Value);
+                if (!professionExists)
+                {
+                    return BadRequest($"Profession with ID {personModel.ProfessionId} does not exist.");
+                }
+            }
+
+            personModel.Hobbies.Clear();
+
             _context.People.Add(personModel);
             await _context.SaveChangesAsync();
 
