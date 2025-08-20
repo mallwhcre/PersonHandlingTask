@@ -13,6 +13,7 @@ builder.Services.AddDbContext<PeopleDbContext>(options =>
 
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(PeopleAPI.Profiles.MappingProfile).Assembly);
 
 var app = builder.Build();
 
