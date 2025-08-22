@@ -61,6 +61,7 @@ namespace PeopleAPI.Controllers
                 }
             }
 
+
             //prevent accidental creation of new hobby entity 
             personModel.Hobbies.Clear();
 
@@ -98,8 +99,30 @@ namespace PeopleAPI.Controllers
                     return BadRequest($"Profession with ID {personModel.ProfessionId} does not exist.");
                 }
             }
+            
+            var hobbyIds = personModel.Hobbies
+                .Where(h => h.Id > 0)
+                .Select(h => h.Id)
+                .ToList();
 
             personModel.Hobbies.Clear();
+            
+            if (hobbyIds.Any())
+            {
+                //check if hobby ids exist
+                var existingHobbies = await _context.Hobbies
+                    .Where(h => hobbyIds.Contains(h.Id))
+                    .ToListAsync();
+                
+                if (existingHobbies.Count != hobbyIds.Count)
+                {
+                    var missingIds = hobbyIds.Except(existingHobbies.Select(h => h.Id));
+                    return BadRequest($"The following hobby IDs do not exist: {string.Join(", ", missingIds)}");
+                }
+                
+                //add existing hobbies to person
+                personModel.Hobbies.AddRange(existingHobbies);
+            }
 
             _context.People.Add(personModel);
             await _context.SaveChangesAsync();
@@ -128,7 +151,7 @@ namespace PeopleAPI.Controllers
             return _context.People.Any(e => e.Id == id);
         }
 
-        // POST: api/People/{personId}/hobbies/{hobbyId}
+      /*  // POST: api/People/{personId}/hobbies/{hobbyId}
         [HttpPost("{personId}/hobbies/{hobbyId}")]
         public async Task<IActionResult> AddHobbyToPerson(int personId, int hobbyId)
         {
@@ -154,7 +177,7 @@ namespace PeopleAPI.Controllers
 
             return Ok();
         }
-
+        */
         // DELETE: api/People/{personId}/hobbies/{hobbyId}
         [HttpDelete("{personId}/hobbies/{hobbyId}")]
         public async Task<IActionResult> RemoveHobbyFromPerson(int personId, int hobbyId)

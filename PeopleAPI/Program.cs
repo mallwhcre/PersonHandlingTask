@@ -3,7 +3,7 @@ using PeopleAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllers();
 
 // Add Entity Framework
@@ -13,7 +13,7 @@ builder.Services.AddDbContext<PeopleDbContext>(options =>
 
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(PeopleAPI.Profiles.MappingProfile).Assembly);
+//builder.Services.AddAutoMapper(typeof(PeopleAPI.Profiles.MappingProfile).Assembly);
 
 var app = builder.Build();
 
