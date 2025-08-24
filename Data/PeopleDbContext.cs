@@ -20,7 +20,7 @@ namespace PeopleAPI.Data
 
             //person-profession relationship (one-to-many)
             modelBuilder.Entity<PersonModel>()
-                .HasOne(p => p.Profession) //person has 1 profession (specify navigation property)
+                .HasOne(p => p.Profession) //person has 1 profession
                 .WithMany() //profession has many people
                 .HasForeignKey(p => p.ProfessionId)
                 .IsRequired(false) //allows null profession

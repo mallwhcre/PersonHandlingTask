@@ -11,10 +11,10 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.FullName, src => src.MapFrom(x => x.FirstName + " " + x.LastName))
             .ForMember(dest => dest.DateOfBirth, src => src.MapFrom(x => x.DateOfBirth))
             .ForMember(dest => dest.Comments, src => src.MapFrom(x => x.Comments))
-            .ForMember(dest => dest.ProfessionName, src => src.MapFrom
-            (
-                x => x.Profession != null ? x.Profession.Name : null
-            ))
-            .ForMember(dest => dest.Hobbies, src => src.MapFrom(x => x.Hobbies));
+            //only Map ProfessionName
+            .ForMember(dest => dest.ProfessionName, src => src.MapFrom(x => x.Profession != null ? x.Profession.Name : null))
+            //Only Map hobbyName
+            .ForMember(dest => dest.Hobbies, src => src.MapFrom(x => 
+                x.Hobbies.Select(h => new HobbyViewDto { Name = h.Name }).ToList()));
     }
 }

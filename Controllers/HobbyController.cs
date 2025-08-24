@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PeopleAPI.Data;
 using PeopleAPI.Models;
 using PeopleAPI.Dto;
+using AutoMapper;
 
 namespace PeopleAPI.Controllers
 {
@@ -16,31 +17,36 @@ namespace PeopleAPI.Controllers
     public class HobbyController : ControllerBase
     {
         private readonly PeopleDbContext _context;
+        private readonly IMapper _mapper;
 
-        public HobbyController(PeopleDbContext context)
+        public HobbyController(PeopleDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Hobby
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HobbyModel>>> GetHobbies()
+        public async Task<ActionResult<IEnumerable<HobbyViewDto>>> GetHobbies()
         {
-            return await _context.Hobbies.ToListAsync();
+            var hobbies = await _context.Hobbies.ToListAsync();
+            var hobbiesDto = _mapper.Map<IEnumerable<HobbyViewDto>>(hobbies);
+            return Ok(hobbiesDto);
         }
 
         // GET: api/Hobby/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<HobbyModel>> GetHobbyModel(int id)
+        public async Task<ActionResult<HobbyViewDto>> GetHobbyModel(int id)
         {
-            var hobbyModel = await _context.Hobbies.FindAsync(id);
+            var hobby = await _context.Hobbies.FindAsync(id);
 
-            if (hobbyModel == null)
+            if (hobby == null)
             {
                 return NotFound();
             }
 
-            return hobbyModel;
+            var hobbyDto = _mapper.Map<HobbyViewDto>(hobby);
+            return Ok(hobbyDto);
         }
 
         // PUT: api/Hobby/5

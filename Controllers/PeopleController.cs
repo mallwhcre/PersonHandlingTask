@@ -30,8 +30,8 @@ namespace PeopleAPI.Controllers
         public async Task<ActionResult<IEnumerable<PersonViewDto>>> GetPeople()
         {
             var people = await _context.People
-                .Include(p => p.Profession.Name)
-                .Include(p => p.Hobbies.Select(h => h.Name).ToList())
+                .Include(p => p.Profession)
+                .Include(p => p.Hobbies)
                 .ToListAsync();
             
             var peopleDto = _mapper.Map<IEnumerable<PersonViewDto>>(people);
