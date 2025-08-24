@@ -9,5 +9,7 @@ public class HobbyProfile : Profile
     {
         CreateMap<HobbyModel, HobbyViewDto>()
             .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name));
+        CreateMap<HobbyViewDto, HobbyModel>()
+            .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
     }
 }
