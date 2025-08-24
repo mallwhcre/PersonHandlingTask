@@ -1,0 +1,2 @@
+When creating a person through POST, we should also be able to add the Hobbies
+the person has taking as input an array of IDs
