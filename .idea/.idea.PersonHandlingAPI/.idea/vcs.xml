@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/dataStructs/DataStructs_Project2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/dataStructs/dataStructs_Project1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/dataStructs/exercises/dataStructs_EX1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/dataStructs/exercises/dataStructs_EX3" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/dataStructs/exercises/dataStructs_EX4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/dataStructs/exercises/dataStructs_EX6" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/flex-bison" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../Ceid/pyProject" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../other/c#/CalculatorAPI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../other/c#/GymTracker" vcs="Git" />
+  </component>
+</project>

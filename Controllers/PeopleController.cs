@@ -58,28 +58,30 @@ namespace PeopleAPI.Controllers
 
         // PUT: api/People/id
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPersonModel(int id, PersonModel personModel)
+        public async Task<IActionResult> PutPersonModel(int id, PersonAddEditDto personDto)
         {
-            if (id != personModel.Id)
+            if (id != personDto.Id)
             {
                 return BadRequest();
             }
 
             // Check if professionID exists
-            if (personModel.ProfessionId.HasValue)
+            if (personDto.ProfessionId.HasValue)
             {
-                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personModel.ProfessionId.Value);
+                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personDto.ProfessionId.Value);
                 if (!professionExists)
                 {
-                    return BadRequest($"Profession with ID {personModel.ProfessionId} does not exist.");
+                    return BadRequest($"Profession with ID {personDto.ProfessionId} does not exist.");
                 }
             }
 
 
             //prevent accidental creation of new hobby entity 
-            personModel.Hobbies.Clear();
+            personDto.HobbyIds.Clear();
 
-            _context.Entry(personModel).State = EntityState.Modified;
+            var existingPerson = await _context.People.FindAsync(id);
+            if (existingPerson == null) return NotFound();
+            _mapper.Map(personDto, existingPerson);
 
             try
             {
@@ -102,29 +104,27 @@ namespace PeopleAPI.Controllers
 
         // POST: api/People
         [HttpPost]
-        public async Task<ActionResult<PersonModel>> PostPersonModel(PersonModel personModel)
+        public async Task<IActionResult> CreatePerson([FromBody] PersonAddEditDto personDto)
         {
-            
-            if (personModel.ProfessionId.HasValue)
+            if (personDto.ProfessionId.HasValue)
             {
-                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personModel.ProfessionId.Value);
+                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personDto.ProfessionId.Value);
                 if (!professionExists)
                 {
-                    return BadRequest($"Profession with ID {personModel.ProfessionId} does not exist.");
+                    return BadRequest($"Profession with ID {personDto.ProfessionId} does not exist.");
                 }
             }
-            
-            var hobbyIds = personModel.Hobbies
-                .Where(h => h.Id > 0)
-                .Select(h => h.Id)
+
+            var hobbyIds = personDto.HobbyIds
+                .Where(h => h > 0)
                 .ToList();
 
-            personModel.Hobbies.Clear();
-            
+            List<HobbyModel> existingHobbies = new();
+
             if (hobbyIds.Any())
             {
                 //check if hobby ids exist
-                var existingHobbies = await _context.Hobbies
+                existingHobbies = await _context.Hobbies
                     .Where(h => hobbyIds.Contains(h.Id))
                     .ToListAsync();
                 
@@ -133,15 +133,26 @@ namespace PeopleAPI.Controllers
                     var missingIds = hobbyIds.Except(existingHobbies.Select(h => h.Id));
                     return BadRequest($"The following hobby IDs do not exist: {string.Join(", ", missingIds)}");
                 }
-                
-                //add existing hobbies to person
-                personModel.Hobbies.AddRange(existingHobbies);
             }
 
+            // Map DTO to model (without hobbies for now)
+            var personModel = _mapper.Map<PersonModel>(personDto);
+            
+            // Associate hobbies with the person
+            personModel.Hobbies = existingHobbies;
+            
             _context.People.Add(personModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPersonModel", new { id = personModel.Id }, personModel);
+            // Reload the person with navigation properties for the response
+            var createdPerson = await _context.People
+                .Include(p => p.Profession)
+                .Include(p => p.Hobbies)
+                .FirstOrDefaultAsync(p => p.Id == personModel.Id);
+
+            var createdPersonDto = _mapper.Map<PersonViewDto>(createdPerson);
+
+            return CreatedAtAction("GetPersonModel", new { id = personModel.Id }, createdPersonDto);
         }
 
         // DELETE: api/People/id

@@ -4,7 +4,8 @@ namespace PeopleAPI.Dto
 {
     public class HobbyAddEditDto
     {
-        [Required]
+        public int Id { get; set; }
+        [Required (ErrorMessage = "Hobby Name is required")]
         [StringLength(100)]
         public string Name { get; set; }
     }

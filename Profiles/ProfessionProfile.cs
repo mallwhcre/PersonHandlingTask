@@ -9,7 +9,10 @@ public class ProfessionProfile : Profile
     {
         CreateMap<ProfessionModel, ProfessionViewDto>()
             .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name));
-        CreateMap<ProfessionViewDto, ProfessionModel>()
-            .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
+        CreateMap<ProfessionAddEditDto, ProfessionModel>()
+            .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name));
+           // .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id));
+
+        
     }
 }
