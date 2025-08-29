@@ -4,6 +4,7 @@ using PeopleAPI.Data;
 using PeopleAPI.Models;
 using PeopleAPI.Dto;
 using AutoMapper;
+using PeopleAPI.Common;
 
 namespace PeopleAPI.Controllers
 {
@@ -33,6 +34,12 @@ namespace PeopleAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<HobbyViewDto>> GetHobbyModel(int id)
         {
+            // Validate ID parameter using InputGuards
+            if (!InputGuards.IsValidId(id))
+            {
+                return BadRequest("Invalid ID provided");
+            }
+
             var hobby = await _context.Hobbies.FindAsync(id);
 
             if (hobby == null)
@@ -45,16 +52,28 @@ namespace PeopleAPI.Controllers
         }
 
         // PUT: api/Hobby/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHobbyModel(int id, HobbyModel hobbyModel)
+        public async Task<IActionResult> PutHobbyModel(int id, HobbyAddEditDto hobbyDto)
         {
-            if (id != hobbyModel.Id)
+            // Validate ID parameter
+            if (!InputGuards.IsValidId(id))
             {
-                return BadRequest();
+                return BadRequest("Invalid ID provided");
             }
 
-            _context.Entry(hobbyModel).State = EntityState.Modified;
+            if (id != hobbyDto.Id)
+            {
+                return BadRequest("ID mismatch between route and body");
+            }
+
+            //Validate with ValidationHelper
+            var validation = ValidationHelper.ValidateHobby(this, hobbyDto);
+            if (validation != null) return validation;
+
+            var existingHobby = await _context.Hobbies.FindAsync(id);
+            if (existingHobby == null) return NotFound();
+
+            _mapper.Map(hobbyDto, existingHobby);
 
             try
             {
@@ -76,20 +95,32 @@ namespace PeopleAPI.Controllers
         }
 
         // POST: api/Hobby
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<HobbyModel>> PostHobbyModel(HobbyModel hobbyModel)
+        public async Task<IActionResult> PostHobbyModel([FromBody] HobbyAddEditDto hobbyDto)
         {
+            var validation = ValidationHelper.ValidateHobby(this, hobbyDto);
+            if (validation != null) return validation;
+
+            // Map DTO to model
+            var hobbyModel = _mapper.Map<HobbyModel>(hobbyDto);
+            
             _context.Hobbies.Add(hobbyModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetHobbyModel", new { id = hobbyModel.Id }, hobbyModel);
+            var createdHobbyDto = _mapper.Map<HobbyViewDto>(hobbyModel);
+            return CreatedAtAction("GetHobbyModel", new { id = hobbyModel.Id }, createdHobbyDto);
         }
 
         // DELETE: api/Hobby/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHobbyModel(int id)
         {
+            // Validate ID parameter
+            if (!InputGuards.IsValidId(id))
+            {
+                return BadRequest("Invalid ID provided");
+            }
+
             var hobbyModel = await _context.Hobbies.FindAsync(id);
             if (hobbyModel == null)
             {

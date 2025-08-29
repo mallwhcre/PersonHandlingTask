@@ -1,0 +1,76 @@
+# gitignore
+# Ignore all Markdown files except README.md
+*.md
+!README.md
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+*.VC.db
+*.VC.VC.opendb
+
+# Rider / ReSharper
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+*.resharper
+/.rider/
+
+# VS Code
+.vscode/
+.history/
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.dll
+*.exe
+*.pdb
+
+# ASP.NET Core
+appsettings.*.local.json
+secrets.json
+
+# Publish output
+publish/
+*.publishsettings
+
+# Logs and dumps
+*.log
+*.dmp
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Coverage / test
+TestResult*/
+TestResults/
+*.coverage
+*.coveragexml
+coverage/
+.coverage
+.nuget/
+
+# Docker
+docker-compose.override.yml

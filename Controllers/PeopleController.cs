@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using PeopleAPI.Data;
 using PeopleAPI.Models;
 using PeopleAPI.Dto;
+using PeopleAPI.Common;
 
 namespace PeopleAPI.Controllers
 {
@@ -42,6 +43,12 @@ namespace PeopleAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PersonViewDto>> GetPersonModel(int id) 
         {
+            // Validate ID parameter using InputGuards
+            if (!InputGuards.IsValidId(id))
+            {
+                return BadRequest("Invalid ID provided");
+            }
+
             var person = await _context.People
                 .Include(p => p.Profession)
                 .Include(p => p.Hobbies)
@@ -60,27 +67,27 @@ namespace PeopleAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPersonModel(int id, PersonAddEditDto personDto)
         {
+            // Validate ID parameter
+            if (!InputGuards.IsValidId(id))
+            {
+                return BadRequest("Invalid ID provided");
+            }
+
             if (id != personDto.Id)
             {
-                return BadRequest();
+                return BadRequest("ID mismatch between route and body");
             }
 
-            // Check if professionID exists
-            if (personDto.ProfessionId.HasValue)
-            {
-                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personDto.ProfessionId.Value);
-                if (!professionExists)
-                {
-                    return BadRequest($"Profession with ID {personDto.ProfessionId} does not exist.");
-                }
-            }
+            // Use ValidationHelper for comprehensive validation
+            var validation = await ValidationHelper.ValidatePerson(this, personDto, _context);
+            if (validation != null) return validation;
 
-
-            //prevent accidental creation of new hobby entity 
+            // Prevent accidental creation of new hobby entity 
             personDto.HobbyIds.Clear();
 
             var existingPerson = await _context.People.FindAsync(id);
             if (existingPerson == null) return NotFound();
+            
             _mapper.Map(personDto, existingPerson);
 
             try
@@ -106,14 +113,9 @@ namespace PeopleAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] PersonAddEditDto personDto)
         {
-            if (personDto.ProfessionId.HasValue)
-            {
-                var professionExists = await _context.Professions.AnyAsync(p => p.Id == personDto.ProfessionId.Value);
-                if (!professionExists)
-                {
-                    return BadRequest($"Profession with ID {personDto.ProfessionId} does not exist.");
-                }
-            }
+            // Use ValidationHelper for comprehensive validation
+            var validation = await ValidationHelper.ValidatePerson(this, personDto, _context);
+            if (validation != null) return validation;
 
             var hobbyIds = personDto.HobbyIds
                 .Where(h => h > 0)
@@ -123,7 +125,7 @@ namespace PeopleAPI.Controllers
 
             if (hobbyIds.Any())
             {
-                //check if hobby ids exist
+                // Check if hobby ids exist using ResourceGuards
                 existingHobbies = await _context.Hobbies
                     .Where(h => hobbyIds.Contains(h.Id))
                     .ToListAsync();
@@ -159,6 +161,12 @@ namespace PeopleAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonModel(int id)
         {
+            // Validate ID parameter
+            if (!InputGuards.IsValidId(id))
+            {
+                return BadRequest("Invalid ID provided");
+            }
+
             var personModel = await _context.People.FindAsync(id);
             if (personModel == null)
             {
