@@ -34,12 +34,6 @@ namespace PeopleAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<HobbyViewDto>> GetHobby(int id)
         {
-            // Validate ID parameter using InputGuards
-            if (!InputGuards.IsValidId(id))
-            {
-                return BadRequest("Invalid ID provided");
-            }
-
             var hobby = await _context.Hobbies.FindAsync(id);
 
             if (hobby == null)
@@ -53,11 +47,11 @@ namespace PeopleAPI.Controllers
 
         // POST: api/Hobby
         [HttpPost]
-        public async Task<IActionResult> AddHobby([FromBody] HobbyAddEditDto hobbyDto)
+        public async Task<IActionResult> AddHobby([FromBody] HobbyAddEditDto Input)
         {
             // Map DTO to model
-            var hobbyModel = _mapper.Map<HobbyModel>(hobbyDto);
-            
+            var hobbyModel = _mapper.Map<HobbyModel>(Input);
+
             _context.Hobbies.Add(hobbyModel);
             await _context.SaveChangesAsync();
 
@@ -67,13 +61,14 @@ namespace PeopleAPI.Controllers
 
         // PUT: api/Hobby/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditHobby(int id, HobbyAddEditDto hobbyDto) //rename to Input 
+        public async Task<IActionResult> EditHobby(int id, HobbyAddEditDto Input)  
         {
             var existingHobby = await _context.Hobbies.FindAsync(id);
+            
             if (existingHobby == null) 
                 return NotFound();
 
-            _mapper.Map(hobbyDto, existingHobby);
+            _mapper.Map(Input, existingHobby);
 
             await _context.SaveChangesAsync();
             
@@ -86,6 +81,7 @@ namespace PeopleAPI.Controllers
         public async Task<IActionResult> DeleteHobby(int id)
         {
             var hobbyModel = await _context.Hobbies.FindAsync(id);
+
             if (hobbyModel is null)
                 return NotFound();
 

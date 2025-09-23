@@ -43,12 +43,6 @@ namespace PeopleAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PersonViewDto>> GetPersonModel(int id) 
         {
-            // Validate ID parameter using InputGuards
-            if (!InputGuards.IsValidId(id))
-            {
-                return BadRequest("Invalid ID provided");
-            }
-
             var person = await _context.People
                 .Include(p => p.Profession)
                 .Include(p => p.Hobbies)
@@ -63,60 +57,11 @@ namespace PeopleAPI.Controllers
             return Ok(personDto);
         }
 
-        // PUT: api/People/id
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPersonModel(int id, PersonAddEditDto personDto)
-        {
-            // Validate ID parameter
-            if (!InputGuards.IsValidId(id))
-            {
-                return BadRequest("Invalid ID provided");
-            }
-
-            if (id != personDto.Id)
-            {
-                return BadRequest("ID mismatch between route and body");
-            }
-
-            // Use ValidationHelper for comprehensive validation
-            var validation = await ValidationHelper.ValidatePerson(this, personDto, _context);
-            if (validation != null) return validation;
-
-            // Prevent accidental creation of new hobby entity 
-            personDto.HobbyIds.Clear();
-
-            var existingPerson = await _context.People.FindAsync(id);
-            if (existingPerson == null) return NotFound();
-            
-            _mapper.Map(personDto, existingPerson);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/People
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] PersonAddEditDto personDto)
         {
-            // Use ValidationHelper for comprehensive validation
-            var validation = await ValidationHelper.ValidatePerson(this, personDto, _context);
-            if (validation != null) return validation;
-
             var hobbyIds = personDto.HobbyIds
                 .Where(h => h > 0)
                 .ToList();
@@ -155,6 +100,27 @@ namespace PeopleAPI.Controllers
             var createdPersonDto = _mapper.Map<PersonViewDto>(createdPerson);
 
             return CreatedAtAction("GetPersonModel", new { id = personModel.Id }, createdPersonDto);
+        }
+        // PUT: api/People/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPersonModel(int id, PersonAddEditDto Input)
+
+        {
+            // Use ValidationHelper for comprehensive validation
+            var validation = await ValidationHelper.ValidatePerson(this, personDto, _context);
+            if (validation != null) return validation;
+
+            // Prevent accidental creation of new hobby entity 
+            personDto.HobbyIds.Clear();
+
+            var existingPerson = await _context.People.FindAsync(id);
+            if (existingPerson == null) return NotFound();
+            
+            _mapper.Map(personDto, existingPerson);
+
+            await _context.SaveChangesAsync();
+            
+            return NoContent();
         }
 
         // DELETE: api/People/id
