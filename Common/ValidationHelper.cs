@@ -38,12 +38,6 @@ public static class ValidationHelper
             dto.Comments = InputGuards.SanitizeString(dto.Comments);
     }
 
-    /// Sanitizes string properties in HobbyAddEditDto
-    public static void SanitizeHobbyDto(HobbyAddEditDto dto)
-    {
-        dto.Name = InputGuards.SanitizeString(dto.Name);
-    }
-
     /// Sanitizes string properties in ProfessionAddEditDto
     public static void SanitizeProfessionDto(ProfessionAddEditDto dto)
     {
@@ -96,18 +90,6 @@ public static class ValidationHelper
         return await ValidatePersonBusinessRules(controller, dto, context);
     }
 
-    /// Complete validation pipeline for Hobby operations
-    public static IActionResult? ValidateHobby(ControllerBase controller, HobbyAddEditDto dto)
-    {
-        // 1. Model validation
-        var modelValidation = ValidateModelState(controller);
-        if (modelValidation != null) return modelValidation;
-
-        // 2. Input sanitization
-        SanitizeHobbyDto(dto);
-
-        return null;
-    }
 
     /// Complete validation pipeline for Profession operations
     public static IActionResult? ValidateProfession(ControllerBase controller, ProfessionAddEditDto dto)

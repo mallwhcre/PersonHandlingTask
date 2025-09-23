@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI.csproj": {}
+    "/home/mar/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj": {}
   },
   "projects": {
-    "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI.csproj": {
+    "/home/mar/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI.csproj",
+        "projectUniqueName": "/home/mar/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj",
         "projectName": "PeopleAPI",
-        "projectPath": "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/PeopleAPI.csproj",
-        "packagesPath": "/Users/mariakarkani/.nuget/packages/",
-        "outputPath": "/Users/mariakarkani/Documents/Dimitris/PeopleAPI/obj/",
+        "projectPath": "/home/mar/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj",
+        "packagesPath": "/home/mar/.nuget/packages/",
+        "outputPath": "/home/mar/Documents/Dimitris/PersonHandlingTask/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/mariakarkani/.nuget/NuGet/NuGet.Config"
+          "/home/mar/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -38,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
@@ -104,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

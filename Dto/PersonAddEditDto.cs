@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PeopleAPI.Dto
 {
-    public class PersonAddEditDto
+    public class PersonAddEditDto //remove ID
     {   
         public int Id { get; set; }
         [Required (ErrorMessage = "First Name is required")]
