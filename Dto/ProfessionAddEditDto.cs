@@ -4,8 +4,9 @@ namespace PeopleAPI.Dto
 {
     public class ProfessionAddEditDto
     {
-        public int Id { get; set; }
+    
         [Required (ErrorMessage = "Profession Name is required")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Profession Name must contain only letters.")]
         [StringLength(100)]
         public string Name { get; set; }
     }

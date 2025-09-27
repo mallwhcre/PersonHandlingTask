@@ -5,7 +5,7 @@ namespace PeopleAPI.Dto
 {
     public class PersonAddEditDto //remove ID
     {   
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First Name must contain only letters.")]
         [Required (ErrorMessage = "First Name is required")]
         [StringLength(100)]
@@ -17,7 +17,7 @@ namespace PeopleAPI.Dto
         public string LastName { get; set; }
         
         [Required (ErrorMessage = "Date of Birth is required")]
-        [ValidDateOfBirth]
+        [ValidDateDOB]
         public DateOnly DateOfBirth { get; set; }
         
         [StringLength(500)]

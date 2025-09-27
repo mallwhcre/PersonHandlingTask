@@ -2,7 +2,7 @@ namespace PeopleAPI.Dto
 {
     public class PersonViewDto
     {
-        //public int Id { get; set; }
+        public int Id { get; set; } //for debugging purposes
         public string FullName { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string? Comments { get; set; }

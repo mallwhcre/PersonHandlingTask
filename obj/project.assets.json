@@ -8280,24 +8280,25 @@
     ]
   },
   "packageFolders": {
-    "/home/mar/.nuget/packages/": {}
+    "/Users/a11111/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mar/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj",
+      "projectUniqueName": "/Users/a11111/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj",
       "projectName": "PeopleAPI",
-      "projectPath": "/home/mar/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj",
-      "packagesPath": "/home/mar/.nuget/packages/",
-      "outputPath": "/home/mar/Documents/Dimitris/PersonHandlingTask/obj/",
+      "projectPath": "/Users/a11111/Documents/Dimitris/PersonHandlingTask/PeopleAPI.csproj",
+      "packagesPath": "/Users/a11111/.nuget/packages/",
+      "outputPath": "/Users/a11111/Documents/Dimitris/PersonHandlingTask/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/mar/.nuget/NuGet/NuGet.Config"
+        "/Users/a11111/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "/opt/homebrew/Cellar/dotnet/9.0.8/libexec/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -8316,7 +8317,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -8382,7 +8383,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/9.0.8/libexec/sdk/9.0.109/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

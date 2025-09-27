@@ -36,10 +36,7 @@ namespace PeopleAPI.Controllers
         {
             var hobby = await _context.Hobbies.FindAsync(id);
 
-            if (hobby == null)
-            {
-                return NotFound();
-            }
+            if (hobby is null) return NotFound();
 
             var hobbyDto = _mapper.Map<HobbyViewDto>(hobby);
             return Ok(hobbyDto);
@@ -65,8 +62,7 @@ namespace PeopleAPI.Controllers
         {
             var existingHobby = await _context.Hobbies.FindAsync(id);
             
-            if (existingHobby == null) 
-                return NotFound();
+            if (existingHobby is null) return NotFound();
 
             _mapper.Map(Input, existingHobby);
 
@@ -82,8 +78,7 @@ namespace PeopleAPI.Controllers
         {
             var hobbyModel = await _context.Hobbies.FindAsync(id);
 
-            if (hobbyModel is null)
-                return NotFound();
+            if (hobbyModel is null) return NotFound();
 
             _context.Hobbies.Remove(hobbyModel);
             await _context.SaveChangesAsync();

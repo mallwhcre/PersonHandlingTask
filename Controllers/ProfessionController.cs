@@ -39,15 +39,9 @@ namespace PeopleAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfessionViewDto>> GetProfessionModel(int id)
         {
-            // Validate ID parameter using InputGuards
-            if (!InputGuards.IsValidId(id))
-            {
-                return BadRequest("Invalid ID provided");
-            }
-
             var profession = await _context.Professions.FindAsync(id);
 
-            if (profession == null)
+            if (profession is null)
             {
                 return NotFound();
             }
@@ -58,43 +52,13 @@ namespace PeopleAPI.Controllers
 
         // PUT: api/Profession/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfessionModel(int id, ProfessionAddEditDto professionDto)
+        public async Task<IActionResult> PutProfessionModel(int id, ProfessionAddEditDto Input)
         {
-            // Validate ID parameter
-            if (!InputGuards.IsValidId(id))
-            {
-                return BadRequest("Invalid ID provided");
-            }
-
-            if (id != professionDto.Id)
-            {
-                return BadRequest("ID mismatch between route and body");
-            }
-
-            // Use ValidationHelper for comprehensive validation
-            var validation = ValidationHelper.ValidateProfession(this, professionDto);
-            if (validation != null) return validation;
-
+    
             var existingProfession = await _context.Professions.FindAsync(id);
-            if (existingProfession == null) return NotFound();
+            if (existingProfession is null) return NotFound();
 
-            _mapper.Map(professionDto, existingProfession);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProfessionModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _mapper.Map(Input, existingProfession);
 
             return NoContent();
         }
@@ -103,10 +67,6 @@ namespace PeopleAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostProfessionModel([FromBody] ProfessionAddEditDto professionDto)
         {
-            // Use ValidationHelper for comprehensive validation
-            var validation = ValidationHelper.ValidateProfession(this, professionDto);
-            if (validation != null) return validation;
-
             // Map DTO to model
             var professionModel = _mapper.Map<ProfessionModel>(professionDto);
             
@@ -121,17 +81,9 @@ namespace PeopleAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProfessionModel(int id)
         {
-            // Validate ID parameter
-            if (!InputGuards.IsValidId(id))
-            {
-                return BadRequest("Invalid ID provided");
-            }
-
             var professionModel = await _context.Professions.FindAsync(id);
-            if (professionModel == null)
-            {
-                return NotFound();
-            }
+            if (professionModel is null) return NotFound();
+
 
             _context.Professions.Remove(professionModel);
             await _context.SaveChangesAsync();

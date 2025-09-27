@@ -1,0 +1,17 @@
+Removed ID attribute from hobby Dto
+Removed Unecessary ID validation from Controllers
+Renamed hobbyDto to Input
+
+
+Simplified validationHelper (might delete)
+
+Completely removed input guards (necessary as regex is responsible for input now)
+Completely removed validationHelper
+
+
+
+For Comments field - Either:
+Add proper input validation/encoding at display time, OR
+Use a more comprehensive sanitization library like HtmlSanitizer, OR
+Trust your frontend to handle display safely
+You
