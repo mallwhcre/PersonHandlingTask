@@ -14,4 +14,5 @@ Minor Input tweaks
 
 Cleaned up syntax
 
-TODO: Put doesn't update Hobby array!!!
+TODO: Put doesn't update Hobby array!!! FIXED
+TODO: Fill PUT with already existing attribute
