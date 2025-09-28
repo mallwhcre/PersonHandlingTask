@@ -8,10 +8,10 @@ Simplified validationHelper (might delete)
 Completely removed input guards (necessary as regex is responsible for input now)
 Completely removed validationHelper
 
+Minor Input tweaks
 
+0 ProfessionID is now null
 
-For Comments field - Either:
-Add proper input validation/encoding at display time, OR
-Use a more comprehensive sanitization library like HtmlSanitizer, OR
-Trust your frontend to handle display safely
-You
+Cleaned up syntax
+
+TODO: Put doesn't update Hobby array!!!

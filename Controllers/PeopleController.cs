@@ -57,11 +57,11 @@ namespace PeopleAPI.Controllers
 
         // POST: api/People
         [HttpPost]
-        public async Task<IActionResult> CreatePerson([FromBody] PersonAddEditDto input)
+        public async Task<IActionResult> CreatePerson([FromBody] PersonAddEditDto Input)
         {
-            if (input.ProfessionId == 0) input.ProfessionId = null; // Handle ProfessionId=0 as null
+            if (Input.ProfessionId == 0) Input.ProfessionId = null; // Handle ProfessionId=0 as null
 
-            var hobbyIds = input.HobbyIds
+            var hobbyIds = Input.HobbyIds
                 .Where(h => h > 0)
                 .ToList();
 
@@ -81,8 +81,7 @@ namespace PeopleAPI.Controllers
                 }
             }
 
-            // Map DTO to model (without hobbies for now)
-            var personModel = _mapper.Map<PersonModel>(input);
+            var personModel = _mapper.Map<PersonModel>(Input);
             
             // Associate hobbies with the person
             personModel.Hobbies = existingHobbies;
@@ -105,17 +104,35 @@ namespace PeopleAPI.Controllers
         public async Task<IActionResult> PutPersonModel(int id, PersonAddEditDto Input)
 
         {   
-
             if (Input.ProfessionId == 0) Input.ProfessionId = null; // Handle ProfessionId=0 as null
+            
+            var hobbyIds = Input.HobbyIds
+                .Where(h => h > 0)
+                .ToList();
 
-    
+            List<HobbyModel> existingHobbies = new();
+            if (hobbyIds.Any())
+            {
+                // Check if hobby ids exist using ResourceGuards
+                existingHobbies = await _context.Hobbies
+                    .Where(h => hobbyIds.Contains(h.Id))
+                    .ToListAsync();
+                
+                if (existingHobbies.Count != hobbyIds.Count)
+                {
+                    var missingIds = hobbyIds.Except(existingHobbies.Select(h => h.Id));
+                    return BadRequest($"The following hobby IDs do not exist: {string.Join(", ", missingIds)}");
+                }
+            }
+
             var existingPerson = await _context.People
-                .Include(p => p.Hobbies) 
+                //.Include(p => p.Hobbies) 
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingPerson is null) return NotFound();
 
             _mapper.Map(Input, existingPerson);
+            existingPerson.Hobbies = existingHobbies;
 
             await _context.SaveChangesAsync();
             
@@ -141,33 +158,6 @@ namespace PeopleAPI.Controllers
             return _context.People.Any(e => e.Id == id);
         }
 
-      /*  // POST: api/People/{personId}/hobbies/{hobbyId}
-        [HttpPost("{personId}/hobbies/{hobbyId}")]
-        public async Task<IActionResult> AddHobbyToPerson(int personId, int hobbyId)
-        {
-            var person = await _context.People.Include(p => p.Hobbies).FirstOrDefaultAsync(p => p.Id == personId);
-            if (person is null)
-            {
-                return NotFound("Person not found");
-            }
-
-            var hobby = await _context.Hobbies.FindAsync(hobbyId);
-            if (hobby is null)
-            {
-                return NotFound("Hobby not found");
-            }
-
-            if (person.Hobbies.Any(h => h.Id == hobbyId))
-            {
-                return BadRequest("Person already has this hobby");
-            }
-
-            person.Hobbies.Add(hobby);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-        */
         // DELETE: api/People/{personId}/hobbies/{hobbyId}
         [HttpDelete("{personId}/hobbies/{hobbyId}")]
         public async Task<IActionResult> RemoveHobbyFromPerson(int personId, int hobbyId)
@@ -189,19 +179,5 @@ namespace PeopleAPI.Controllers
 
             return Ok();
         }
-
-     /*   // GET: api/People/{personId}/hobbies
-        [HttpGet("{personId}/hobbies")]
-        public async Task<ActionResult<IEnumerable<HobbyModel>>> GetPersonHobbies(int personId)
-        {
-            var person = await _context.People.Include(p => p.Hobbies).FirstOrDefaultAsync(p => p.Id == personId);
-            if (person is null)
-            {
-                return NotFound("Person not found");
-            }
-
-            return Ok(person.Hobbies);
-        }
-        */
     }
 }
