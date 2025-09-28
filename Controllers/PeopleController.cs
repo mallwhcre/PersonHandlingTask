@@ -103,7 +103,10 @@ namespace PeopleAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPersonModel(int id, PersonAddEditDto Input)
 
-        {   
+        {
+
+            if (existingPerson is null) return NotFound();
+
             if (Input.ProfessionId == 0) Input.ProfessionId = null; // Handle ProfessionId=0 as null
             
             var hobbyIds = Input.HobbyIds
@@ -111,13 +114,20 @@ namespace PeopleAPI.Controllers
                 .ToList();
 
             List<HobbyModel> existingHobbies = new();
+            
+            
+            var existingPerson = await _context.People
+                //.Include(p => p.Hobbies) 
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+
             if (hobbyIds.Any())
             {
                 // Check if hobby ids exist using ResourceGuards
                 existingHobbies = await _context.Hobbies
                     .Where(h => hobbyIds.Contains(h.Id))
                     .ToListAsync();
-                
+
                 if (existingHobbies.Count != hobbyIds.Count)
                 {
                     var missingIds = hobbyIds.Except(existingHobbies.Select(h => h.Id));
@@ -125,11 +135,7 @@ namespace PeopleAPI.Controllers
                 }
             }
 
-            var existingPerson = await _context.People
-                //.Include(p => p.Hobbies) 
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (existingPerson is null) return NotFound();
+            
 
             _mapper.Map(Input, existingPerson);
             existingPerson.Hobbies = existingHobbies;
